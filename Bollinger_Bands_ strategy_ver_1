@@ -1,0 +1,93 @@
+// mohammad_sedaghat developer and trader and saman.jalilian forex trader 
+// mhsd_pc@yahoo.com
+
+//@version=2
+strategy("MH BB custom", shorttitle="MH BB custom", overlay=true)
+
+
+
+PriceClose = close
+PriceOpen = open
+
+
+
+// ///////////// Bollinger Bands drawing 
+BBlength = input(20, minval=1,title="Bollinger Period Length")
+BBmult = 2 
+
+
+///////////// Colors
+switch1=input(true, title="Enable Bar Color?")
+switch2=input(true, title="Enable Background Color?")
+
+
+
+
+stopLossPct = input(title="Stop Loss (% of Entry Price)", type=float, defval=1.0, minval=0.1, maxval=10.0, step=0.1)
+takeProfitPct = input(title="Take Profit (% of Entry Price)", type=float, defval=1.0, minval=0.1, maxval=10.0, step=0.1)
+MH = input(title="MH", type=float, defval=0.2, minval=0.1, maxval=10.0, step=0.1)
+
+
+
+// Calculate BB
+
+
+BBbasis = sma(PriceClose, BBlength)
+BBdev = BBmult * stdev(PriceClose, BBlength)
+BBupper = BBbasis + BBdev
+BBlower = BBbasis - BBdev
+source = close
+buyEntry = crossover(source, BBlower)
+sellEntry = crossunder(source, BBupper)
+
+
+
+// new
+
+
+
+
+
+// drawing 
+plot(BBbasis, color=aqua,title="Bollinger Bands SMA Basis Line")
+p1 = plot(BBupper, color=silver,title="Bollinger Bands Upper Line")
+p2 = plot(BBlower, color=silver,title="Bollinger Bands Lower Line")
+fill(p1, p2)
+
+////// end Bollinger Bands drawing 
+// open start
+
+Rcandel0=close < open and (open - close) > (MH * (high - low))? true : false
+Gcandel0=close > open and (close - open) > (MH * (low - high))? true : false
+
+Rcandel1=close[1] < open[1]  ? true : false
+Gcandel1=close[1] > open[1]  ? true : false
+
+
+
+redGreenCandles=Rcandel0 == true and Gcandel1 == true ? true : false
+greenredCandles=Gcandel0 == true and Rcandel1 == true ? true : false
+
+
+
+dynamicstoplosslong = stopLossPct
+dynamicstoplossshort = stopLossPct
+
+
+
+
+if (crossunder(close[1] + close[1]*.002  , BBlower)and (close > BBlower) and greenredCandles) // kafe buy
+    strategy.entry("Buy", strategy.long)
+    stopLossPct = dynamicstoplosslong
+    strategy.exit("TP/SL Buy", "Buy", stop=close * (1 - stopLossPct / 100), limit=close * (1 + takeProfitPct / 100))
+
+
+
+else
+    if (crossover(close[1] - close[1]*.002 , BBupper)and close < BBupper and redGreenCandles) /// saghf sell
+        strategy.entry("Sell", strategy.short)
+        stopLossPct = dynamicstoplossshort
+        strategy.exit("TP/SL Sell", "Sell", stop=close * (1 + stopLossPct / 100), limit=close * (1 - takeProfitPct / 100))
+
+
+
