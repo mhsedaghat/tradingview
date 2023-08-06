@@ -23,7 +23,7 @@ About the Developers
 
 Mohammad Sedaghat is a seasoned developer with over 10 years of experience in web development and software engineering. He has worked on several projects ranging from e-commerce platforms to financial software and has a deep understanding of modern web technologies.
 
-Saman Jalilian is a seasoned strategist with over 15 years of experience in financial markets. He has worked with top financial institutions and hedge funds, providing strategic advice and insights to help clients achieve their financial goals.
+Saman Jalilian is a seasoned strategist with over 7 years of experience in financial markets. He has worked with top financial institutions and hedge funds, providing strategic advice and insights to help clients achieve their financial goals.
 
 Together, Mohammad and Saman have combined their expertise to create the Trading View Project, a powerful tool for analyzing and visualizing stock market data.
 Contributing
